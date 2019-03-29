@@ -24,45 +24,45 @@ def process_header_row(row):
 
 
 def process_company_row(row, output_writer):
-    company_number = row[0:8]
-    record_type = row[8]
-    company_status = row[9]
+    company_number = row[0:8].strip()
+    record_type = row[8].strip()
+    company_status = row[9].strip()
     number_of_officers = int(row[32:36])
     name_length = int(row[36:40])
-    company_name = row[40:(40 + name_length - 1)]
+    company_name = row[40:(40 + name_length - 1)].strip()
     output_writer.writerow(
         [company_number, company_status, number_of_officers, company_name])
 
 
 def process_person_row(row, output_writer):
-    company_number = row[0:8]
-    record_type = row[8]
-    app_date_origin = row[9]
-    appointment_type = row[10:12]
-    person_number = row[12:24]
-    corporate_indicator = row[24]
-    appointment_date = row[32:40]
-    resignation_date = row[40:48]
-    postcode = row[48:56]
-    partial_date_of_birth = row[56:64]
-    full_date_of_birth = row[64:72]
+    company_number = row[0:8].strip()
+    record_type = row[8].strip()
+    app_date_origin = row[9].strip()
+    appointment_type = row[10:12].strip()
+    person_number = row[12:24].strip()
+    corporate_indicator = row[24].strip()
+    appointment_date = row[32:40].strip()
+    resignation_date = row[40:48].strip()
+    postcode = row[48:56].strip()
+    partial_date_of_birth = row[56:64].strip()
+    full_date_of_birth = row[64:72].strip()
     variable_data_length = int(row[72:76])
     variable_data = row[76:76 + variable_data_length]
     variable_data_array = variable_data.split('<')
-    title = variable_data_array[0]
-    forenames = variable_data_array[1]
-    surname = variable_data_array[2]
-    honours = variable_data_array[3]
-    care_of = variable_data_array[4]
-    po_box = variable_data_array[5]
-    address_line_1 = variable_data_array[6]
-    address_line_2 = variable_data_array[7]
-    post_town = variable_data_array[8]
-    county = variable_data_array[9]
-    country = variable_data_array[10]
-    occupation = variable_data_array[11]
-    nationality = variable_data_array[12]
-    res_country = variable_data_array[13]
+    title = variable_data_array[0].strip()
+    forenames = variable_data_array[1].strip()
+    surname = variable_data_array[2].strip()
+    honours = variable_data_array[3].strip()
+    care_of = variable_data_array[4].strip()
+    po_box = variable_data_array[5].strip()
+    address_line_1 = variable_data_array[6].strip()
+    address_line_2 = variable_data_array[7].strip()
+    post_town = variable_data_array[8].strip()
+    county = variable_data_array[9].strip()
+    country = variable_data_array[10].strip()
+    occupation = variable_data_array[11].strip()
+    nationality = variable_data_array[12].strip()
+    res_country = variable_data_array[13].strip()
     # print(company_number, record_type, app_date_origin, appointment_type, person_number, corporate_indicator, appointment_date,
     # resignation_date, postcode, partial_date_of_birth, full_date_of_birth, variable_data_length, variable_data)
     # print("title = %s forenames = %s surname = %s honours = %s care_of = %s po_box = %s address_line_1 = %s address_line_2 = %s post_town = %s county = %s country = %s occupation = %s nationality = %s res_country = %s" % (
