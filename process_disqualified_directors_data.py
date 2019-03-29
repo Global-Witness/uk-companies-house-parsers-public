@@ -78,7 +78,7 @@ def process_exemption_row(row, output_writer):
     record_type = row[0]
     person_number = str(row[1:9])
     exemption_start_date = row[13:21]
-    exemption_end_date = row[22:30]
+    exemption_end_date = row[21:29]
     exemption_purpose = int(row[29:39])
     exemption_purpose_dict = defaultdict(
         lambda: '', {
