@@ -119,6 +119,7 @@ def process_company_appointments_data(input_file, output_folder,
                                       base_input_name):
     companies_processed = 0
     persons_processed = 0
+    error_code = 0
     output_companies_file, output_companies_writer, output_persons_file, output_persons_writer = init_input_files(
         output_folder, base_input_name)
     for row_num, row in enumerate(input_file):
@@ -127,20 +128,27 @@ def process_company_appointments_data(input_file, output_folder,
         elif row[0:8] == TRAILER_RECORD_IDENTIFIER:
             # End of file
             record_count = int(row[8:16])
-            print(
-                "Reached end of file. Processed %s == %s records: %s companies, %s persons."
-                % (record_count, companies_processed + persons_processed,
-                   companies_processed, persons_processed))
+            total_processed = companies_processed + persons_processed
+            if record_count == total_processed:
+                print(
+                    "Reached end of file. Processed %s records: %s companies, %s persons."
+                    % (total_processed, companies_processed, persons_processed))
+            else:
+                print(
+                    "Reached end of file. ERROR: Processed %s records out of %s: %s companies, %s persons."
+                    % (total_processed, record_count, companies_processed, persons_processed))
+                error_code = 1
             output_companies_file.close()
             output_persons_file.close()
-            sys.exit(0)
+            sys.exit(error_code)
         elif row[8] == COMPANY_RECORD_TYPE:
             process_company_row(row, output_companies_writer)
             companies_processed += 1
         elif row[8] == PERSON_RECORD_TYPE:
             process_person_row(row, output_persons_writer)
             persons_processed += 1
-
+    print("ERROR: File ended abbruptly. Did not find a TRAILER_RECORD_IDENTIFIER.")
+    sys.exit(1)
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
