@@ -13,4 +13,4 @@ Developed by Global Witness and Vitamin Software
 
 # License
 
-See `LICENSE`.
+See `LICENSE`
