@@ -1,6 +1,7 @@
 import csv
 import os
 import sys
+from collections import defaultdict
 
 PERSONS_OUTPUT_FILENAME_TEMPLATE = "persons_data_%s.csv"
 DISQUALIFICATIONS_FILENAME_TEMPLATE = "disqualifications_data_%s.csv"
@@ -28,21 +29,37 @@ def process_header_row(row):
 
 def process_person_row(row, output_writer):
     record_type = row[0]
-    person_number = row[1:12]
+    person_number = str(row[1:12])
     person_dob = row[13:24]
     person_postcode = row[13:20]
     person_variable_ind = int(row[29:33])
     person_details = row[33:33 + person_variable_ind]
+    person_details = person_details.split('<')
+    title = person_details[0]
+    forenames = person_details[1]
+    surname = person_details[2]
+    honours = person_details[3]
+    address_line_1 = person_details[4]
+    address_line_2 = person_details[5]
+    posttown = person_details[6]
+    county = person_details[7]
+    country = person_details[8]
+    nationality = person_details[9]
+    corporate_number = person_details[10]
+    country_registration = person_details[11]
     output_writer.writerow([
-        record_type, person_number, person_dob, person_postcode, person_details
+        record_type, person_number, person_dob, person_postcode,
+        person_details, title, forenames, surname, honours, address_line_1,
+        address_line_2, posttown, county, country, nationality,
+        corporate_number, country_registration
     ])
 
 
 def process_disqualification_row(row, output_writer):
     record_type = row[0]
-    person_number = row[1:13]
-    disqual_start_date = row[13:22]
-    disqual_end_date = row[21::28]
+    person_number = str(row[1:13])
+    disqual_start_date = row[13:21]
+    disqual_end_date = row[21:29]
     section_of_act = row[29:49]
     disqual_type = row[49:79]
     disqual_order_date = row[79:87]
@@ -53,16 +70,27 @@ def process_disqualification_row(row, output_writer):
     output_writer.writerow([
         record_type, person_number, disqual_start_date, disqual_end_date,
         section_of_act, disqual_type, disqual_order_date, case_number,
-        company_name, court_name_variable_ind
+        company_name, court_name
     ])
 
 
 def process_exemption_row(row, output_writer):
     record_type = row[0]
-    person_number = row[1:9]
-    exemption_start_date = row[13:22]
-    exemption_end_date = row[21:29]
-    exemption_purpose = row[29:39]
+    person_number = str(row[1:9])
+    exemption_start_date = row[13:21]
+    exemption_end_date = row[22:30]
+    exemption_purpose = int(row[29:39])
+    exemption_purpose_dict = defaultdict(
+        lambda: '', {
+            1: 'Promotion',
+            2: 'Formation',
+            3:
+            'Directorships or other participation in management of a company',
+            4:
+            'Designated member/member or other participation in management of an LLP',
+            5: 'Receivership in relation to a company or LLP'
+        })
+    exemption_purpose = exemption_purpose_dict[exemption_purpose]
     exemption_company_name_ind = int(row[39:43])
     exemption_company_name = row[43:43 + exemption_company_name_ind]
     output_writer.writerow([
@@ -76,7 +104,9 @@ def init_person_output_file(filename):
     persons_writer = csv.writer(output_persons_file, delimiter=",")
     persons_writer.writerow([
         "record_type", "person_number", "person_dob", "person_postcode",
-        "person_details"
+        "person_details", 'title', 'forenames', 'surname', 'honours',
+        'address_line_1', 'address_line_2', 'posttown', 'county', 'country',
+        'nationality', 'corporate_number', 'country_registration'
     ])
     return output_persons_file, persons_writer
 
