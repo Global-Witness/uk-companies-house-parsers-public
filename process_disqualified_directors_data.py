@@ -29,9 +29,9 @@ def process_header_row(row):
 
 def process_person_row(row, output_writer):
     record_type = row[0]
-    person_number = str(row[1:12])
-    person_dob = row[13:24]
-    person_postcode = row[13:20]
+    person_number = str(row[1:13])
+    person_dob = row[13:21]
+    person_postcode = row[21:29]
     person_variable_ind = int(row[29:33])
     person_details = row[33:33 + person_variable_ind]
     person_details = person_details.split('<')
