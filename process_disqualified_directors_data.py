@@ -65,7 +65,7 @@ def process_disqualification_row(row, output_writer):
     disqual_order_date = row[79:87]
     case_number = row[87:117]
     company_name = row[117:277]
-    court_name_variable_ind = int(row[277:279])
+    court_name_variable_ind = int(row[277:281])
     court_name = row[281:281 + court_name_variable_ind]
     output_writer.writerow([
         record_type, person_number, disqual_start_date, disqual_end_date,
